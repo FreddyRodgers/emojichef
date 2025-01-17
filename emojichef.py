@@ -1,6 +1,3 @@
-"""
-emojichef.py - Interactive menu interface for EmojiChef v2.1
-"""
 import sys
 from pathlib import Path
 from typing import List
