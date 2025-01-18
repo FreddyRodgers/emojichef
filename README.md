@@ -1,10 +1,10 @@
-# 👨‍🍳 EmojiChef v2.1 | LoadedTater
+# 👨‍🍳 EmojiChef v2.2 | LoadedTater
 
 Welcome to EmojiChef's Kitchen, where plain text gets cooked into delicious [emoji](https://home.unicode.org/emoji/) encodings! EmojiChef is a Python-based text encoder that transforms your messages into tasty emoji representations using various "recipe" types. Our kitchen serves up both classic and gourmet emoji dishes, with a focus on efficiency and flavor!
 
-For peer review: [mathematic principles and encoding theory](docs/emojichef-v2-math.md) supporting EmojiChef v2.1
+For peer review: [mathematic principles and encoding theory](docs/emojichef-v2-math.md) supporting EmojiChef v2.2
 
-![image](images/interactive-menu.png)
+[Advanced User Guide](docs/emojichef-advanced-guide.md)
 
 ## Features
 
@@ -14,97 +14,127 @@ For peer review: [mathematic principles and encoding theory](docs/emojichef-v2-m
 - 📁 Batch processing
 - 🛠️ Interactive menu for those who shall not be named
 
-## Installation
+## Quick Start
 
+1. Clone and run:
 ```bash
 git clone https://github.com/FreddyRodgers/emojichef.git
 cd emojichef
+python emojichef-cli.py encode "Hello, World!"
 ```
 
-Requires Python 3.6 or later. No additional dependencies needed!
-
-## Quick Start
-
-### Basic Text Encoding
-```python
-from emoji_codec import EmojiCodec
-
-# Create codec
-codec = EmojiCodec()
-
-# Encode text
-encoded = codec.encode("Hello!")
-print(encoded)  # Output: 😀😃😄😁😆😅
-
-# Decode text
-decoded = codec.decode(encoded)
-print(decoded)  # Output: Hello!
+2. Or use interactive mode:
+```bash
+python emojichef-cli.py interactive
 ```
 
-### File Processing
-```python
+![image](images/interactive-menu.png)
+
+That's it! You're cooking with emojis! 🎉
+
+## Quick Examples
+
+### Encode Some Text
+```bash
+# Basic encoding
+python emojichef-cli.py encode "Hello!"
+>> 😀😃😄😁😆😅
+
+# With compression
+python emojichef-cli.py encode -c zlib "Hello!"
+>> 😎😋😉😊
+
+# Different recipe (base-64 with food emojis)
+python emojichef-cli.py encode -r quick "Hello!"
+>> 🍅🍆🍇🍈🍉🍊
+```
+
+### Process Files
+```bash
 # Encode a file
-codec.process_file('document.txt', 'encoded.emoji', 'encode')
+python emojichef-cli.py encode -f message.txt -o encoded.emoji
 
 # Decode a file
-codec.process_file('encoded.emoji', 'decoded.txt', 'decode')
+python emojichef-cli.py decode -f encoded.emoji -o decoded.txt
+
+# Process multiple files
+python emojichef-cli.py batch "*.txt" --batch-output encoded_files/
 ```
 
-### Using Different Recipes
-```python
-# Quick recipe (Base-64)
-quick_codec = EmojiCodec("quick")
-quick_encoded = quick_codec.encode("Hi!")  # Uses food emojis
+## More Examples
 
-# Gourmet recipe (Base-1024)
-gourmet_codec = EmojiCodec("gourmet")
-gourmet_encoded = gourmet_codec.encode("Hi!")  # Uses extended emojis
-```
-
-### With Compression
-```python
-from emoji_codec import EmojiCodec, CompressionMethod
-
-# Enable compression
-codec = EmojiCodec(
-    recipe_type="gourmet",
-    compression=CompressionMethod.ZLIB
-)
-
-# Process large file with compression
-codec.process_file('large_file.txt', 'compressed.emoji', 'encode')
-```
-
-### Batch Processing
-```python
-# Process multiple text files
-results = codec.batch_process(
-    "*.txt",
-    "encoded_files",
-    operation='encode'
-)
-
-# Process multiple encoded files
-results = codec.batch_process(
-    "*.emoji",
-    "decoded_files",
-    operation='decode'
-)
-```
-
-## Interactive Menu
-
-Run the interactive menu:
+### Handling Different File Types
 ```bash
-python emojichef.py
+# Text files
+python emojichef-cli.py encode -f document.txt -o document.emoji
+
+# Log files with compression
+python emojichef-cli.py encode -f app.log -c zlib -o compressed.emoji
+
+# Configuration files with verification
+python emojichef-cli.py encode -f config.json -v sha256 -o config.emoji
 ```
 
-This provides access to:
-- Quick encode/decode
-- File operations
-- Batch processing
-- Settings management
-- Analysis tools
+### Batch Processing Examples
+```bash
+# Process all text files
+python emojichef-cli.py batch "*.txt" 
+
+# Process specific file types
+python emojichef-cli.py batch "docs/*.md" --batch-output encoded/
+
+# Process with compression
+python emojichef-cli.py batch "logs/*.log" -c zlib
+```
+
+### File Analysis
+```bash
+# Get optimal settings for a file
+python emojichef-cli.py analyze -f large_file.txt
+
+# Check encoded file
+python emojichef-cli.py analyze -f encoded.emoji
+```
+
+### Command Line Options
+```bash
+# Show all options
+python emojichef-cli.py --help
+
+# Show version
+python emojichef-cli.py --version
+
+# Quiet mode (no progress output)
+python emojichef-cli.py encode -f file.txt -q
+```
+
+## Common Tasks
+
+### Text Messages
+```bash
+# Standard message
+python emojichef-cli.py encode "Meeting at 3pm"
+
+# URL encoding
+python emojichef-cli.py encode -r gourmet "https://example.com"
+
+# Multi-line text
+python emojichef-cli.py encode "Line 1
+Line 2
+Line 3"
+```
+
+### File Operations
+```bash
+# Encode with best compression
+python emojichef-cli.py encode -f data.txt -r gourmet -c zlib
+
+# Process with verification
+python emojichef-cli.py encode -f important.txt -v sha256
+
+# Quick processing
+python emojichef-cli.py encode -f notes.txt -r quick
+```
 
 ## Recipe Types
 
@@ -116,12 +146,10 @@ This provides access to:
 ###
 [Emoji Mapping Documentation](docs/emoji-mappings.md)
 
-## Planned Features
+## Requirements
 
-- [ ] Custom emoji mapping definitions
-- [ ] Support ecoji 2.0 (base 1024) encoding scheme
-- [ ] Streaming support for large files
-- [ ] Configuration file support
+- Python 3.6 or later
+- No additional dependencies!
 
 ## Security Note
 
@@ -137,9 +165,10 @@ This provides access to:
 
 ## Version History
 
+- v2.2: CLI rewrite with option for interactive menu
 - v2.1: Added binary file support and enhanced menu
 - v2.0: Flawed Rewrite: Added compression and file operations
-- v1.0: Initial release with basic encoding
+- [v1.0](https://github.com/FreddyRodgers/emojichef-v1): Initial release with basic encoding
 
 ## License
 
